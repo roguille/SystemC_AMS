@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 2.6)
+project (SystemC_AMS)
+include_directories(inc)
+include_directories("/usr/local/systemc-2.3.2/include")
+link_directories("/usr/local/systemc-2.3.2/lib-linux64")
+link_libraries(systemc.so)
+file(GLOB SOURCES "src/*.cpp")
+add_executable(SystemC_AMS ${SOURCES})
