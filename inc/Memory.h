@@ -13,25 +13,26 @@ class Memory : public sc_core::sc_module
 {
 public:
 
-	SC_CTOR(Memory) : m_Socket("SocketMem"), m_Latency(70, SC_NS)
-	{
-		// Register callbacks for incoming interface method calls
-    	m_Socket.register_nb_transport_fw(this, &Memory::nb_transport_fw);
-		std::fill(m_MemData, m_MemData + SIZE, 0);
-		SC_THREAD(RespondRequestThread);
-	}
+	SC_HAS_PROCESS(Memory);
 
-  	virtual ~Memory(){};
+	// Constructor and Destructor
+	Memory(sc_core::sc_module_name ModuleName);
+  	virtual ~Memory();
 
+  	// Callbacks
   	virtual tlm::tlm_sync_enum nb_transport_fw( tlm::tlm_generic_payload& trans, tlm::tlm_phase& phase, sc_core::sc_time& delay );
-  	void RespondRequestThread();
+  	
+  	// Threads
+  	void ProcessRequests();
   	
 	// Attributes
 	enum{ SIZE = 256};
   	tlm_utils::simple_target_socket<Memory> m_Socket;
-  	sc_core::sc_event m_RequestEvent;
-  	sc_core::sc_time m_Latency;
+	
+private:
+	// Attributes
 	int m_MemData[SIZE];
+	sc_core::sc_event m_NewRequestEvent;
 	std::queue<TransRequest> m_RequestQueue;
 };
 
