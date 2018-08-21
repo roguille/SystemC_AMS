@@ -1,29 +1,20 @@
-#ifndef L_FILTER_H_
-#define L_FILTER_H_
+#include  <systemc.h>
+#include  <systemc-ams.h>
 
-#include "systemc.h"
-#include "tlm.h"
-#include "tlm_utils/simple_initiator_socket.h"
-#include "tlm_utils/simple_target_socket.h"
-#include "UtilCommon.h"
-#include <queue>
 
-SC_MODULE(lp_eln) {
-sca_tdf::sca_in<double> in; 
-sca_tdf::sca_out<double> out; 
-sca_eln::sca_node  n1,n2; // electrical nodes 
-sca_eln::sca_node_ref  gnd;
-sca_c c; sca_r r; // capacitor and resistor 
-sca_eln::sca_tdf::sca_vsource   vin; // TDF to voltage converter 
-sca_eln::sca_tdf::sca_vsink  vout; // voltage to TDF converter
-lp_eln(sc_module_name n,double freq_cut):c("c"),r("r"),vin("vin"),("vout") 
-	double  R = 1000.; // choose fixed R 
-	double  C = 1/(2*M_PI*R*freq_cut); // and compute C relative to it
-     vin.p(n1); vin.n(gnd); vin.ctrl(in);
-     vout.p(n2); vout.tdf_voltage(out);
-     c.value = C; 
-     c.p(n2); c.n(gnd);
-     r.value = R; 
-     r.n(n1); r.p(n2); 
-   } 
+SC_MODULE(filter) {
+sca_lsf :: sca_in  in;  //input  port 
+sca_lsf :: sca_out  out; // output  port
+sca_lsf :: sca_signal  sig; // internal  signal11
+sca_lsf :: sca_dot  dot1;   
+sca_lsf :: sca_sub  sub1;   
+
+SC_CTOR(filter) : dot1("dot1", 1.0/(2.0* M_PI *1.0e3)), sub1("sub1") {
+dot1.x(out);
+dot1.y(sig);
+
+sub1.x1(in);
+sub1.x2(sig);
+sub1.y(out);
+}
 };
