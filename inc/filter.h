@@ -6,7 +6,7 @@ SC_MODULE(filter) {
 public:
 sca_lsf :: sca_in  in;  //input  port 
 sca_lsf :: sca_out  out; // output  port
-sca_lsf :: sca_signal  sig; // internal  signal11
+sca_lsf :: sca_signal  sig; // SeNal interna
 sca_lsf :: sca_dot  dot1;   
 sca_lsf :: sca_sub  sub1;   
 
