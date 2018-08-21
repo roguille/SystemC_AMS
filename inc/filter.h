@@ -1,3 +1,6 @@
+#ifndef FILTER_H_
+#define FILTER_H_
+
 #include  <systemc.h>
 #include  <systemc-ams.h>
 
